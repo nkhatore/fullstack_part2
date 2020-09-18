@@ -6,6 +6,7 @@ const App = () => {
   const [ search, setSearch ] = useState('')
   const [ countries, setCountries ] = useState([])
   const [ results, setResults ] = useState([])
+  const [ clickedIndex, setClickedIndex ] = useState(-1)
 
   const hook = () => {
     // console.log('effect')
@@ -22,6 +23,7 @@ const App = () => {
   const handleSearch = (event) => {
     // console.log(event.target.value)
     setSearch(event.target.value)
+    setClickedIndex(-1)
     if (event.target.value) {
       setResults(countries.filter(country => country.name.toLowerCase().includes(event.target.value.toLowerCase())))
     } else {
@@ -33,9 +35,7 @@ const App = () => {
     <div>
       find countries: <input value={search} onChange={handleSearch} />
       <div>
-        {results.length > 10 ?
-          <p>Too many results, be more specific.</p>
-          : <Results results={results} />}
+        <Results results={results} clickedIndex={clickedIndex} setClickedIndex={setClickedIndex} />
       </div>
     </div>
   )
