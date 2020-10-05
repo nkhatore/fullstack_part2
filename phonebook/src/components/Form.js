@@ -1,4 +1,5 @@
 import React from 'react'
+import personService from '../services/persons'
 
 const Form = (props) => {
 	const persons = props.persons, setPersons = props.setPersons
@@ -14,10 +15,17 @@ const Form = (props) => {
 
     for (let i = 0; i < persons.length; i++) {
       if (persons[i].name === personObject.name) {
-        window.alert(newName + ' is already in the phonebook.')
+        const confirm = window.confirm(newName + ' is already in the phonebook; replace old number with new one?')
+        if (confirm) {
+          personService.update(persons[i].id, personObject)
+          setNewName('')
+          setNewNumber('')
+        }
         return
       }
     }
+    
+    personService.create(personObject)
 
     setPersons(persons.concat(personObject))
     setNewName('')
