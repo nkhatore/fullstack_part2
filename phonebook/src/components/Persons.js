@@ -7,20 +7,20 @@ const Persons = (props) => {
 	const setPersons = props.setPersons
 
 	const selectPersons = () => {
-		let filtered = []
+		//let filtered = []
 		if (search) {
-			filtered = persons.filter(person => person.name.toLowerCase().includes(search.toLowerCase()))
+			return persons.filter(person => person.name.toLowerCase().includes(search.toLowerCase()))
 		} else {
-			filtered = persons
+			return persons
 		}
-		return filtered
+		//return filtered
 	}
 
 	const removePerson = person => {
 		const confirm = window.confirm(`Delete ${person.name}?`)
 		if (confirm) {
 			personService.erase(person)
-			setPersons(persons.filter(p => p.name !== person.name))
+			setPersons(persons.filter(p => p.id !== person.id))
 		}
 	}
 
