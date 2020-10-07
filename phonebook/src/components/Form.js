@@ -7,6 +7,7 @@ const Form = (props) => {
 	const newName = props.newName, setNewName = props.setNewName
   const newNumber = props.newNumber, setNewNumber = props.setNewNumber
   const [ message, setMessage ] = useState(null)
+  const [ messageType, setMessageType ] = useState('update')
 
 	const addEntry = (event) => {
     event.preventDefault()
@@ -20,7 +21,19 @@ const Form = (props) => {
       if (persons[i].name === personObject.name) {
         const confirm = window.confirm(newName + ' is already in the phonebook; replace old number with new one?')
         if (confirm) {
-          personService.update(persons[i].id, personObject)
+          personService
+            .update(persons[i].id, personObject)
+            .catch(error => {
+              setMessageType('error')
+              setMessage(
+                `Info for '${newName}' was already removed from server.`
+              )
+              setTimeout(() => {
+                setMessageType('update')
+                setMessage(null)
+              }, 5000)
+              setPersons(persons.filter(p => p.id !== persons[i].id))
+            })
           setMessage(`Updated ${newName}.`)
           setTimeout(() => {
             setMessage(null)
@@ -56,7 +69,7 @@ const Form = (props) => {
 
 	return (
 		<form onSubmit={addEntry}>
-      <Notification message={message} type={'update'} />
+      <Notification message={message} type={messageType} />
 			<div>
 				name: <input value={newName} onChange={handleNewName} />
 			</div>
